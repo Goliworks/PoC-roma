@@ -11,11 +11,10 @@ type Server struct {
 }
 
 func NewServer() *Server{
-	srv := Server{
-		mux: http.NewServeMux(),
-	}
+	srv := new(Server)
+	srv.mux = http.NewServeMux()
 	srv.mux.HandleFunc("/", Handler)
-	return &srv
+	return srv
 }
 
 func (s *Server) Launch(){
