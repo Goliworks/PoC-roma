@@ -1,7 +1,12 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"github.com/Goliworks/Roma/internal/server"
+)
 
 func main(){
-	fmt.Println("Hello, Roma!")
+	fmt.Println()
+	srv := server.NewServer()
+	srv.Launch()
 }
