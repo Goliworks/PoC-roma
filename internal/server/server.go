@@ -14,9 +14,7 @@ func NewServer() *Server{
 	srv := Server{
 		mux: http.NewServeMux(),
 	}
-	srv.mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request){
-		fmt.Fprint(w, "Hello, Roma!")
-	})
+	srv.mux.HandleFunc("/", Handler)
 	return &srv
 }
 
