@@ -31,7 +31,7 @@ func NewConfig() *Config {
 	return cfg
 }
 
-func (c *Config) generateDestinations(){
+func (c *Config) generateDestinations() {
 	for i, s := range c.Data.Services {
 		fmt.Printf("%v & %v\n", i, s)
 	}

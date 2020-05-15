@@ -4,7 +4,7 @@ import (
 	"github.com/Goliworks/Roma/internal/server"
 )
 
-func main(){
+func main() {
 	srv := server.NewServer()
 	srv.Launch()
 }
