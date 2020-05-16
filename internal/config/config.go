@@ -1,9 +1,5 @@
 package config
 
-import (
-	"fmt"
-)
-
 const (
 	defaultHttpPort = 80
 )
@@ -24,15 +20,11 @@ func NewConfig() *Config {
 	cfg.YamlConf = NewYamlConf()
 	cfg.generateDestinations()
 
-	// temporary test
-	cfg.Destinations["dev1.test"] = "localhost:3500"
-	cfg.Destinations["dev2.test"] = "localhost:3000"
-
 	return cfg
 }
 
 func (c *Config) generateDestinations() {
-	for i, s := range c.Data.Services {
-		fmt.Printf("%v & %v\n", i, s)
+	for d, s := range c.Data.Services {
+		c.Destinations[d] = s.Location
 	}
 }
