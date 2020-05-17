@@ -6,24 +6,23 @@ import (
 	"log"
 )
 
-type yamlFile struct {
+type YamlFile struct {
+	Http struct {
+		Port uint16
+	}
 	Services map[string]struct {
 		Location string
 	}
 }
 
-type YamlConf struct {
-	Data yamlFile
-}
+var YamlConf YamlFile
 
-func NewYamlConf() *YamlConf {
-	yc := new(YamlConf)
-	yc.Data = yamlFile{}
+func NewYamlConf() *YamlFile {
 	yf, _ := ioutil.ReadFile("conf.yml")
-	err := yaml.Unmarshal(yf, &yc.Data)
+	err := yaml.Unmarshal(yf, &YamlConf)
 	if err != nil {
 		log.Fatal(err)
 	}
-	log.Println(yc.Data)
-	return yc
+	log.Println(YamlConf)
+	return &YamlConf
 }

@@ -9,24 +9,25 @@ import (
 
 type Server struct {
 	mux *http.ServeMux
+	cfg *config.Config
 }
 
 func NewServer() *Server {
 	srv := new(Server)
 	srv.mux = http.NewServeMux()
-	cfg := config.NewConfig()
+	srv.cfg = config.NewConfig()
 	srv.mux.HandleFunc("/",
 		func(w http.ResponseWriter, r *http.Request) {
-			Handler(w, r, cfg)
+			Handler(w, r, srv.cfg)
 		})
 	return srv
 }
 
 func (s *Server) Launch() {
 	srv := http.Server{
-		Addr:    ":8080",
+		Addr:    s.cfg.Port,
 		Handler: s.mux,
 	}
-	fmt.Println("Launch simple server on port :8080")
+	fmt.Printf("Launch simple server on port %v\n", s.cfg.Port)
 	log.Fatal(srv.ListenAndServe())
 }

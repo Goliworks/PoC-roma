@@ -1,30 +1,35 @@
 package config
 
+import "fmt"
+
 const (
-	defaultHttpPort = 80
+	defaultHttpPort = ":80"
 )
 
 type Destinations map[string]string
 
 type Config struct {
-	Port uint16
+	Port string
 	Destinations
-	*YamlConf
 }
 
 func NewConfig() *Config {
 	cfg := new(Config)
-	cfg.Port = defaultHttpPort
 	cfg.Destinations = make(Destinations)
 
-	cfg.YamlConf = NewYamlConf()
-	cfg.generateDestinations()
+	yc := NewYamlConf()
+	if yc.Http.Port != 0 {
+		cfg.Port = fmt.Sprintf(":%v", yc.Http.Port)
+	} else {
+		cfg.Port = defaultHttpPort
+	}
+	cfg.generateDestinations(yc)
 
 	return cfg
 }
 
-func (c *Config) generateDestinations() {
-	for d, s := range c.Data.Services {
+func (c *Config) generateDestinations(yc *YamlFile) {
+	for d, s := range yc.Services {
 		c.Destinations[d] = s.Location
 	}
 }
