@@ -17,5 +17,6 @@ func Handler(w http.ResponseWriter, r *http.Request, cfg *config.Config) {
 	fmt.Printf("destination host : %v\n", destUrl.Host)
 
 	proxy := httputil.NewSingleHostReverseProxy(destUrl)
+	proxy.ErrorHandler = badGateway
 	proxy.ServeHTTP(w, r)
 }
