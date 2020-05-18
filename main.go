@@ -6,5 +6,6 @@ import (
 
 func main() {
 	srv := server.NewServer()
+	go srv.LaunchTLS()
 	srv.Launch()
 }
