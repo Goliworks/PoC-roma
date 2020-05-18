@@ -9,6 +9,9 @@ import (
 type YamlFile struct {
 	Http struct {
 		Port uint16
+		TLS  struct {
+			Port uint16
+		}
 	}
 	Services map[string]struct {
 		Location string
