@@ -3,7 +3,7 @@ package config
 import (
 	"crypto/tls"
 	"fmt"
-	"path/filepath"
+	"github.com/Goliworks/Roma/internal/utils"
 )
 
 const (
@@ -52,8 +52,8 @@ func (c *Config) generateDestinations(yc *YamlFile) {
 func (c *Config) generateCertificates(yc *YamlFile) {
 	c.TLSConf = &tls.Config{}
 	for _, i := range yc.Http.TLS.Certificates {
-		crt, _ := filepath.Abs(i.Cert)
-		key, _ := filepath.Abs(i.Key)
+		crt := utils.AbsPath(i.Cert)
+		key := utils.AbsPath(i.Key)
 		kp, _ := tls.LoadX509KeyPair(crt, key)
 		c.TLSConf.Certificates = append(c.TLSConf.Certificates, kp)
 	}
