@@ -10,7 +10,11 @@ type YamlFile struct {
 	Http struct {
 		Port uint16
 		TLS  struct {
-			Port uint16
+			Port         uint16
+			Certificates []struct {
+				Cert string
+				Key  string
+			}
 		}
 	}
 	Services map[string]struct {
@@ -20,7 +24,7 @@ type YamlFile struct {
 
 var YamlConf YamlFile
 
-func NewYamlConf() *YamlFile {
+func GetYamlConf() *YamlFile {
 	yf, _ := ioutil.ReadFile("conf.yml")
 	err := yaml.Unmarshal(yf, &YamlConf)
 	if err != nil {

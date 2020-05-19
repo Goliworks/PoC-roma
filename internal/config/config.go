@@ -1,6 +1,10 @@
 package config
 
-import "fmt"
+import (
+	"crypto/tls"
+	"fmt"
+	"path/filepath"
+)
 
 const (
 	defaultPort    = ":80"
@@ -13,13 +17,14 @@ type Config struct {
 	Port    string
 	PortTLS string
 	Destinations
+	TLSConf *tls.Config
 }
 
 func NewConfig() *Config {
 	cfg := new(Config)
 	cfg.Destinations = make(Destinations)
 
-	yc := NewYamlConf()
+	yc := GetYamlConf()
 
 	if yc.Http.Port != 0 {
 		cfg.Port = fmt.Sprintf(":%v", yc.Http.Port)
@@ -33,6 +38,7 @@ func NewConfig() *Config {
 	}
 
 	cfg.generateDestinations(yc)
+	cfg.generateCertificates(yc)
 
 	return cfg
 }
@@ -40,5 +46,15 @@ func NewConfig() *Config {
 func (c *Config) generateDestinations(yc *YamlFile) {
 	for d, s := range yc.Services {
 		c.Destinations[d] = s.Location
+	}
+}
+
+func (c *Config) generateCertificates(yc *YamlFile) {
+	c.TLSConf = &tls.Config{}
+	for _, i := range yc.Http.TLS.Certificates {
+		crt, _ := filepath.Abs(i.Cert)
+		key, _ := filepath.Abs(i.Key)
+		kp, _ := tls.LoadX509KeyPair(crt, key)
+		c.TLSConf.Certificates = append(c.TLSConf.Certificates, kp)
 	}
 }
