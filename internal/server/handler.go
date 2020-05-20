@@ -10,6 +10,9 @@ import (
 
 func Handler(w http.ResponseWriter, r *http.Request, cfg *config.Config) {
 	ptc := "http"
+	if r.TLS != nil {
+		ptc = "https"
+	}
 	inUrl, _ := url.Parse(fmt.Sprintf("%v://%v", ptc, r.Host))
 	destUrl, _ := url.Parse(fmt.Sprintf("http://%v", cfg.Destinations[inUrl.Hostname()]))
 

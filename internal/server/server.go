@@ -28,7 +28,7 @@ func (s *Server) Launch() {
 		Addr:    s.cfg.Port,
 		Handler: s.mux,
 	}
-	fmt.Printf("Launch simple server on port %v\n", s.cfg.Port)
+	fmt.Printf("Launch server on port %v\n", s.cfg.Port)
 	log.Fatal(srv.ListenAndServe())
 }
 
@@ -38,6 +38,6 @@ func (s *Server) LaunchTLS() {
 		Handler:   s.mux,
 		TLSConfig: s.cfg.TLSConf,
 	}
-	fmt.Printf("Launch simple server on port %v\n", s.cfg.PortTLS)
+	fmt.Printf("Launch HTTPS server on port %v\n", s.cfg.PortTLS)
 	log.Fatal(srv.ListenAndServeTLS("", ""))
 }
