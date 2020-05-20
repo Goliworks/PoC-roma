@@ -9,6 +9,14 @@ import (
 )
 
 func Handler(w http.ResponseWriter, r *http.Request, cfg *config.Config) {
+	serveRProxy(w, r, cfg)
+}
+
+func HandlerTLS(w http.ResponseWriter, r *http.Request, cfg *config.Config) {
+	serveRProxy(w, r, cfg)
+}
+
+func serveRProxy(w http.ResponseWriter, r *http.Request, cfg *config.Config) {
 	ptc := "http"
 	if r.TLS != nil {
 		ptc = "https"

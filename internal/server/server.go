@@ -8,25 +8,24 @@ import (
 )
 
 type Server struct {
-	mux *http.ServeMux
 	cfg *config.Config
 }
 
 func NewServer() *Server {
 	srv := new(Server)
-	srv.mux = http.NewServeMux()
 	srv.cfg = config.NewConfig()
-	srv.mux.HandleFunc("/",
-		func(w http.ResponseWriter, r *http.Request) {
-			Handler(w, r, srv.cfg)
-		})
 	return srv
 }
 
 func (s *Server) Launch() {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/",
+		func(w http.ResponseWriter, r *http.Request) {
+			Handler(w, r, s.cfg)
+		})
 	srv := http.Server{
 		Addr:    s.cfg.Port,
-		Handler: s.mux,
+		Handler: mux,
 	}
 	fmt.Printf("Launch server on port %v\n", s.cfg.Port)
 	log.Fatal(srv.ListenAndServe())
@@ -39,9 +38,14 @@ func (s *Server) LaunchTLS() {
 				"Server cannot run HTTPS mode.\n")
 		return
 	}
+	mux := http.NewServeMux()
+	mux.HandleFunc("/",
+		func(w http.ResponseWriter, r *http.Request) {
+			HandlerTLS(w, r, s.cfg)
+		})
 	srv := http.Server{
 		Addr:      s.cfg.PortTLS,
-		Handler:   s.mux,
+		Handler:   mux,
 		TLSConfig: s.cfg.TLSConf,
 	}
 	fmt.Printf("Launch HTTPS server on port %v\n", s.cfg.PortTLS)
