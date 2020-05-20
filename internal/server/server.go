@@ -33,6 +33,12 @@ func (s *Server) Launch() {
 }
 
 func (s *Server) LaunchTLS() {
+	if len(s.cfg.TLSConf.Certificates) == 0 {
+		fmt.Printf(
+			"No TLS certificate has been registred.\n" +
+				"Server cannot run HTTPS mode.\n")
+		return
+	}
 	srv := http.Server{
 		Addr:      s.cfg.PortTLS,
 		Handler:   s.mux,
