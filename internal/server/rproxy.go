@@ -19,6 +19,9 @@ func serveRProxy(w http.ResponseWriter, r *http.Request, cfg *config.Config) {
 	//fmt.Printf("incoming host : %v\n", r.Host)
 	//fmt.Printf("destination host : %v\n", destUrl.Host)
 
+	r.Header.Set("X-Forwarded-Host", r.Header.Get("Host"))
+	r.Host = destUrl.Host
+
 	proxy := httputil.NewSingleHostReverseProxy(destUrl)
 	proxy.ErrorHandler = badGateway
 	proxy.ServeHTTP(w, r)
