@@ -11,6 +11,7 @@ type YamlFile struct {
 		Port uint16
 		TLS  struct {
 			Port         uint16
+			Auto         bool
 			Certificates []struct {
 				Cert string
 				Key  string
@@ -25,6 +26,9 @@ type YamlFile struct {
 var YamlConf YamlFile
 
 func GetYamlConf() *YamlFile {
+	//Default values
+	YamlConf.Http.TLS.Auto = true
+	// Get data from file
 	yf, _ := ioutil.ReadFile("conf.yml")
 	err := yaml.Unmarshal(yf, &YamlConf)
 	if err != nil {
