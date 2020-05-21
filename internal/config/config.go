@@ -7,8 +7,8 @@ import (
 )
 
 const (
-	defaultPort    = ":80"
-	defaultTLSPort = ":443"
+	DefaultPort    = ":80"
+	DefaultTLSPort = ":443"
 )
 
 type Destinations map[string]string
@@ -18,6 +18,7 @@ type Config struct {
 	PortTLS string
 	Destinations
 	TLSConf *tls.Config
+	AutoTLS bool
 }
 
 func NewConfig() *Config {
@@ -29,14 +30,15 @@ func NewConfig() *Config {
 	if yc.Http.Port != 0 {
 		cfg.Port = fmt.Sprintf(":%v", yc.Http.Port)
 	} else {
-		cfg.Port = defaultPort
+		cfg.Port = DefaultPort
 	}
 	if yc.Http.TLS.Port != 0 {
 		cfg.PortTLS = fmt.Sprintf(":%v", yc.Http.TLS.Port)
 	} else {
-		cfg.PortTLS = defaultTLSPort
+		cfg.PortTLS = DefaultTLSPort
 	}
 
+	cfg.AutoTLS = yc.Http.TLS.Auto
 	cfg.generateDestinations(yc)
 	cfg.generateCertificates(yc)
 
