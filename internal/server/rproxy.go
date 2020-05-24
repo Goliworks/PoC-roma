@@ -14,7 +14,7 @@ func serveRProxy(w http.ResponseWriter, r *http.Request, cfg *config.Config) {
 		ptc = "https"
 	}
 	inUrl, _ := url.Parse(fmt.Sprintf("%v://%v", ptc, r.Host))
-	destUrl, _ := url.Parse(fmt.Sprintf("http://%v", cfg.Destinations[inUrl.Hostname()]))
+	destUrl, _ := url.Parse(fmt.Sprintf("http://%v", cfg.Destinations[inUrl.Hostname()].Location))
 
 	//fmt.Printf("incoming host : %v\n", r.Host)
 	//fmt.Printf("destination host : %v\n", destUrl.Host)

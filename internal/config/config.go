@@ -11,20 +11,22 @@ const (
 	DefaultTLSPort = ":443"
 )
 
-type Destinations map[string]string
+type DestConf struct {
+	Location string
+	AutoTLS  bool
+}
 
 type Config struct {
-	Port    string
-	PortTLS string
-	Destinations
-	TLSConf *tls.Config
-	AutoTLS bool
+	Port         string
+	PortTLS      string
+	Destinations map[string]*DestConf
+	TLSConf      *tls.Config
+	AutoTLS      bool
 }
 
 func NewConfig() *Config {
 	cfg := new(Config)
-	cfg.Destinations = make(Destinations)
-
+	cfg.Destinations = make(map[string]*DestConf)
 	yc := GetYamlConf()
 
 	if yc.Http.Port != 0 {
@@ -47,7 +49,13 @@ func NewConfig() *Config {
 
 func (c *Config) generateDestinations(yc *YamlFile) {
 	for d, s := range yc.Services {
-		c.Destinations[d] = s.Location
+		dc := &DestConf{Location: s.Location}
+		if s.AutoTLS == nil {
+			dc.AutoTLS = true
+		} else {
+			dc.AutoTLS = *s.AutoTLS
+		}
+		c.Destinations[d] = dc
 	}
 }
 

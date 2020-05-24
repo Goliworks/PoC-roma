@@ -20,6 +20,7 @@ type YamlFile struct {
 	}
 	Services map[string]struct {
 		Location string
+		AutoTLS  *bool `yaml:"autoTLS"`
 	}
 }
 
