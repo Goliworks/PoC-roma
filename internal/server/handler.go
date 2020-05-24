@@ -10,8 +10,8 @@ import (
 type HandlerDefinition func(w http.ResponseWriter, r *http.Request, cfg *config.Config)
 
 func Handler(w http.ResponseWriter, r *http.Request, cfg *config.Config) {
-	if cfg.AutoTLS {
-		u, _ := url.Parse(fmt.Sprintf("http://%v", r.Host))
+	u, _ := url.Parse(fmt.Sprintf("http://%v", r.Host))
+	if cfg.AutoTLS && cfg.Destinations[u.Hostname()].AutoTLS {
 		port := ""
 		if cfg.PortTLS != config.DefaultTLSPort {
 			port = cfg.PortTLS
